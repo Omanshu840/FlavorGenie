@@ -1,8 +1,42 @@
-import { GoogleGenAI } from "@google/genai";
+import { initialState } from "./redux/reducer";
 
-const ai = new GoogleGenAI({
-    apiKey: process.env.REACT_APP_GEMINI_API_KEY
-});
+const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY}`;
+
+const callGemini = async (promptText) => {
+    const requestData = {
+        contents: [
+            {
+                parts: [
+                    {
+                        text: promptText,
+                    },
+                ],
+            },
+        ],
+    };
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    let recipe = data.candidates[0].content.parts[0].text;
+    recipe = recipe
+        .replace(/^```json/, "")
+        .replace(/```$/, "")
+        .trim();
+    recipe = JSON.parse(recipe);
+
+    return recipe;
+}
 
 export async function generateRecipe(userQuery) {
     const promptText = `
@@ -57,38 +91,33 @@ export async function generateRecipe(userQuery) {
         Strictly follow the above rules.
     `;
 
-    const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
-        contents: promptText,
-    });
-
-    let recipe = response.text;
-    recipe = recipe.replace(/^```json/, '').replace(/```$/, '').trim();
-    recipe = JSON.parse(recipe);
-
-    let imageFound = false;
-
-    for(let i = 0; i<recipe.wikipediaTitles.length; i++) {
-        const wikiTitle = recipe.wikipediaTitles[i];
-        if(!imageFound) {
-            const imgLink = await getImage(wikiTitle);
-            if(imgLink) {
-                recipe.image = imgLink;
-                imageFound = true;
+    try {
+        const recipe = await callGemini(promptText);
+        let imageFound = false;
+        for (let i = 0; i < recipe.wikipediaTitles.length; i++) {
+            const wikiTitle = recipe.wikipediaTitles[i];
+            if (!imageFound) {
+                const imgLink = await getImage(wikiTitle);
+                if (imgLink) {
+                    recipe.image = imgLink;
+                    imageFound = true;
+                }
             }
         }
+        return recipe;
+    } catch (error) {
+        console.error("Error fetching response:", error);
+        return initialState.newRecipe;
     }
-
-    return recipe;
 }
 
 export const generateRecipeFromIngredients = async (ingredients) => {
     let query = "which can be made from following ingredients: ";
     ingredients.forEach((ingredient, index) => {
-        query = `${query} ${index+1}.${ingredient}`
-    })
+        query = `${query} ${index + 1}.${ingredient}`;
+    });
     return await generateRecipe(query);
-}
+};
 
 export const generateImage = async (userQuery) => {
     const promptText = `
@@ -107,36 +136,35 @@ export const generateImage = async (userQuery) => {
         Strictly follow the above rules.
     `;
 
-    const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
-        contents: promptText,
-    });
-
-    let recipe = response.text;
-    recipe = recipe.replace(/^```json/, '').replace(/```$/, '').trim();
-    recipe = JSON.parse(recipe);
-
-    for(let i = 0; i<recipe.wikipediaTitles.length; i++) {
-        const wikiTitle = recipe.wikipediaTitles[i];
-        const imgLink = await getImage(wikiTitle);
-        if(imgLink) {
-            return imgLink;
+    try {
+        const recipe = await callGemini(promptText);
+        for (let i = 0; i < recipe.wikipediaTitles.length; i++) {
+            const wikiTitle = recipe.wikipediaTitles[i];
+            const imgLink = await getImage(wikiTitle);
+            if (imgLink) {
+                return imgLink;
+            }
         }
+        return "";
+    } catch(error) {
+        console.error("Error fetching response:", error);
+        return "";
     }
-    return "";
-}
+};
 
 export const getImage = async (name) => {
     try {
         name = removeSpace(name);
-        const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${name}`)
+        const response = await fetch(
+            `https://en.wikipedia.org/api/rest_v1/page/media-list/${name}`
+        );
         const data = await response.json();
         const imageURL = removeLeadingSlashes(data?.items[0]?.srcset[0]?.src);
-        return imageURL
+        return imageURL;
     } catch {
         return null;
     }
-}
+};
 
 function removeSpace(input) {
     return input.trim().replace(/\s+/g, "_");
