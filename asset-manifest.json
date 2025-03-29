@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/FlavorGenie/static/css/main.b73ed1ce.css",
+    "main.js": "/FlavorGenie/static/js/main.32d9818f.js",
+    "index.html": "/FlavorGenie/index.html",
+    "main.b73ed1ce.css.map": "/FlavorGenie/static/css/main.b73ed1ce.css.map",
+    "main.32d9818f.js.map": "/FlavorGenie/static/js/main.32d9818f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b73ed1ce.css",
+    "static/js/main.32d9818f.js"
+  ]
+}

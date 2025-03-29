@@ -1,0 +1,26 @@
+{
+  "short_name": "FlavorGenie",
+  "name": "FlavorGenie - AI Recipe Generator",
+  "icons": [
+    {
+      "src": "Flavor-Genie-Logo.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "Flavor-Genie-Logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "Flavor-Genie-Logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#FF6F61",
+  "background_color": "#ffffff",
+  "description": "Generate, save, and organize recipes effortlessly with AI."
+}
