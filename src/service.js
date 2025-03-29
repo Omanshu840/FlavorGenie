@@ -84,7 +84,7 @@ export async function generateRecipe(userQuery) {
         2. description should be a string.
         3. calories should be a string (just number of calories).
         4. timeToCook should be a string (XX Mins / X Hrs XX Min).
-        5. ingredients should be a list of objects, with each object having three keys (name, quantity)
+        5. ingredients should be a list of objects, with each object having three keys (name (Max two words), quantity (max two words))
         6. steps is a list of strings
         7. youtubeLinks is a list of strings
         8. wikipediaTitles is a list of strings. Case of the characters in each string should match with the wikipedia title that exists. Replace the space in the title with underscore. 

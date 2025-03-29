@@ -1,6 +1,6 @@
 .recipe-container {
     margin: auto;
-  }
+}
   
   .image-section {
     position: relative;
@@ -26,12 +26,15 @@
     margin-top: -30px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     padding: 10px;
-    background: #fff;
+    background: linear-gradient(to bottom, #FCF9FA, #F9F9FB);
+    padding-bottom: 50px;
   }
   
   .recipe-title {
-    font-size: 20px;
+    text-align: center;
+    font-size: 25px;
     font-weight: bold;
+    width: 100%;
   }
   
   .heart-icon {

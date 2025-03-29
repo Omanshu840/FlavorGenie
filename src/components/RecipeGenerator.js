@@ -52,7 +52,7 @@ const RecipeGenerator = (props) => {
     return (
         <Container className="px-4 pt-5">
             <div className="mb-5">
-                <h1 className="">I would like to cook</h1>
+                <h1 className="">What would you like to cook today?</h1>
                 <SearchBar
                     placeholder="Enter your query to generate recipe"
                     onSearch={onGenerateRecipe}
@@ -84,7 +84,7 @@ const RecipeGenerator = (props) => {
                         boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
                     }}
                 >
-                    <h4 className="mb-3">Not sure what to cook tonight?</h4>
+                    <h4 className="mb-3">Not sure what to cook?</h4>
                     <div className="d-flex align-items-center mb-2">
                         <FaWandMagicSparkles
                             size={24}
@@ -92,7 +92,7 @@ const RecipeGenerator = (props) => {
                             className="me-2"
                         />
                         <span style={{ fontWeight: "500" }}>
-                            We'll conjure a recipe from your ingredients
+                            {"We'll conjure a recipe from your ingredients"}
                         </span>
                     </div>
                     <div
