@@ -40,7 +40,7 @@ const callGemini = async (promptText) => {
 
 export async function generateRecipe(userQuery) {
     const promptText = `
-        You are an expert chef and food researcher. Generate a recipe for ${userQuery}.
+        You are an expert Indian chef and Indian food researcher. Generate a Indian recipe for ${userQuery}.
         
         Generate a structured JSON output containing:
         - Recipe title

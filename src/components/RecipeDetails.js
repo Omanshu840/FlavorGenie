@@ -8,9 +8,9 @@ import { Accordion, useAccordionButton } from "react-bootstrap";
 import { ChevronDown } from "react-bootstrap-icons";
 import { PlayCircle } from "react-bootstrap-icons";
 import { ClockFill, Fire } from "react-bootstrap-icons";
-// import YouTubeEmbed from "./YoutubeEmbed";
+import VideoListContainer from "./VideoList";
 
-const FooterButton = () => {
+const FooterButton = ({ onClick }) => {
     return (
         <div
             style={{
@@ -28,6 +28,7 @@ const FooterButton = () => {
                     border: "none",
                     boxShadow: Shadows.Box_Shadow2,
                 }}
+                onClick={onClick}
             >
                 <PlayCircle size={20} className="me-2" />
                 Watch Videos
@@ -58,7 +59,7 @@ export const RecipeSteps = ({ steps }) => {
                     </Card.Header>
                     <Accordion.Collapse eventKey={index.toString()}>
                         <Card.Body>
-                            <div style={{fontSize: '14px'}}>{step}</div>
+                            <div style={{ fontSize: "14px" }}>{step}</div>
                         </Card.Body>
                     </Accordion.Collapse>
                 </Card>
@@ -195,6 +196,8 @@ const RecipeDetailsTabs = ({ recipe }) => {
 };
 
 const RecipeDetails = ({ recipe, onBack }) => {
+    const [showPanel, setShowPanel] = useState(false);
+
     return (
         <div className="recipe-container">
             {/* Image Section */}
@@ -228,14 +231,23 @@ const RecipeDetails = ({ recipe, onBack }) => {
                     </div>
                     <RecipeStats recipe={recipe} />
 
-                    <div style={{textAlign: 'center', fontSize: '14px', color: Colors.PR3}}>{recipe.description}</div>
+                    <div
+                        style={{
+                            textAlign: "center",
+                            fontSize: "14px",
+                            color: Colors.PR3,
+                        }}
+                    >
+                        {recipe.description}
+                    </div>
 
                     <RecipeDetailsTabs recipe={recipe} />
-
-                    {/* <YouTubeEmbed videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" /> */}
                 </Card.Body>
             </Card>
-            <FooterButton />
+            {!showPanel &&
+                <FooterButton onClick={() => setShowPanel(true)} />
+            }
+            <VideoListContainer showPanel={showPanel} setShowPanel={setShowPanel} videos={recipe.youtubeLinks}/>
         </div>
     );
 };
